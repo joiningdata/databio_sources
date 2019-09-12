@@ -1,3 +1,4 @@
+# less than 5s for end-to-end loading
 
 #############################################
 # download and extract the current data
@@ -9,13 +10,13 @@ echo "mim_number" > omim_phenotypes.txt
 grep 'phenotype' mim2gene.txt |grep -v '^#' | cut -f1  >>omim_phenotypes.txt
 
 # keep only the header and gene records listed
-egrep '(^#|gene)' mim2gene.txt >mim2gene.genes.txt
+echo $'mim_number\tmim_type\tentrez_gene_id\tsymbol\tensembl_gene_id' > mim2gene.genes.txt
+grep -v '^#' mim2gene.txt |grep gene >>mim2gene.genes.txt
 
-echo "mim_number" > omim_genes.txt
-cut -f1 mim2gene.genes.txt |grep -v '^#' >>omim_genes.txt
+cut -f1 mim2gene.genes.txt >omim_genes.txt
 
-cut -f1,3 mim2gene.genes.txt |grep -v '\t$' >>omim_gene2ncbi_gene.tsv
-cut -f1,5 mim2gene.genes.txt |grep -v '\t$' >>omim_gene2ensembl_gene.tsv
+cut -f1,3 mim2gene.genes.txt |grep -v '\t$' >omim_gene2ncbi_gene.tsv
+cut -f1,5 mim2gene.genes.txt |grep -v '\t$' >omim_gene2ensembl_gene.tsv
 
 #############################################
 
