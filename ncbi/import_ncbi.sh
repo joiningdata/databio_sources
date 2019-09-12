@@ -1,3 +1,4 @@
+# approx 12 mins end-to-end for import.
 
 handleSubset() {
 	filename=$1
@@ -85,3 +86,16 @@ echo import -d "\"$STAMP\"" map gov.nih.nlm.ncbi.refseq_protein org.uniprot.acc 
 echo import ref gov.nih.nlm.ncbi.gene entrez.ris
 echo import ref gov.nih.nlm.ncbi.refseq_protein refseq.ris
 echo import ref gov.nih.nlm.ncbi.refseq_transcript refseq.ris
+
+cut -f1 refseq_protein2*.tsv >refseq_protein1.txt
+cut -f2 *2refseq_protein.tsv | sort -u - refseq_protein1.txt | fgrep -v protein_accession.version > refseq_proteins.txt
+rm refseq_protein1.txt
+
+cut -f1 refseq_transcript2*.tsv >refseq_transcript1.txt
+cut -f2 *2refseq_transcript.tsv | sort -u - refseq_transcript1.txt >refseq_transcript2.txt
+echo RNA_nucleotide_accession.version > refseq_transcripts.txt
+fgrep -v RNA_nucleotide_accession.version refseq_transcript2.txt >> refseq_transcripts.txt
+rm refseq_transcript1.txt refseq_transcript2.txt
+
+echo import -d "\"$STAMP\"" -s "\"Entrez Gene Linked\"" index gov.nih.nlm.ncbi.refseq_protein refseq_proteins.txt
+echo import -d "\"$STAMP\"" -s "\"Entrez Gene Linked\"" index gov.nih.nlm.ncbi.refseq_transcript refseq_transcripts.txt
