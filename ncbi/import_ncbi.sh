@@ -5,9 +5,8 @@ handleSubset() {
 	subsetName=`basename "$filename" gene_info.gz|sed 's/All_Data.//'|sed 's/All_//'`
 	STAMP=`TZ=UTC date -r "$filename" "+%FT%T"`
 
-	echo $STAMP $filename >&2
+	echo $filename >&2
 	gunzip -c "$filename" |cut -f2 >ncbi_gene.${subsetName}txt
-	wc -l ncbi_gene.${subsetName}txt >&2
 
 	label=`echo $subsetName |tr _ ' '|sed 's/\.$//'`
 	echo import -d "\"$STAMP\"" -s "\"$label\"" index gov.nih.nlm.ncbi.gene ncbi_gene.${subsetName}txt
@@ -18,7 +17,6 @@ handleMapping() {
 	ofn=$2
 
 	cut -f $1 gene2ensembl |grep -v -- '-$' > "$ofn"
-	wc -l "$ofn" >&2
 }
 
 # get a LOT of gene data and subsets
@@ -34,8 +32,6 @@ curl -LO ftp://ftp.ncbi.nih.gov/gene/DATA/gene2ensembl.gz
 
 #############################################
 # download and extract the current data
-
-echo $STAMP gene2ensembl.gz >&2
 
 gunzip -c gene2ensembl.gz > gene2ensembl
 
@@ -77,7 +73,6 @@ echo import urls gov.nih.nlm.ncbi.refseq_transcript "\"https://www.ncbi.nlm.nih.
 echo import new org.uniprot.acc "\"UniprotKB Accession\""
 echo import urls org.uniprot.acc "\"https://uniprot.org\"" "\"https://www.uniprot.org/uniprot/%s\""
 
-#STAMP=`TZ=UTC date -r gene_refseq_uniprotkb_collab.gz "+%FT%T"`
 STAMP=`TZ=UTC date "+%FT%T"`
 curl -LO ftp://ftp.ncbi.nlm.nih.gov/refseq/uniprotkb/gene_refseq_uniprotkb_collab.gz
 gunzip -c gene_refseq_uniprotkb_collab.gz > refseq_protein2uniprot.tsv
