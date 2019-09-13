@@ -32,11 +32,6 @@ echo import new jp.kegg.gene "\"KEGG Gene ID\""
 echo import urls jp.kegg.gene "\"https://kegg.jp\"" "\"https://www.genome.jp/dbget-bin/www_bget?%s\""
 echo import ref jp.kegg.gene kegg.ris
 
-# record metadata
-echo import new org.uniprot.acc "\"UniprotKB Accession\""
-echo import urls org.uniprot.acc "\"https://www.uniprot.org\"" "\"https://www.uniprot.org/uniprot/%s\""
-echo import ref org.uniprot.acc uniprot.ris
-
 #############################################
 # download and extract the current data
 
@@ -44,11 +39,11 @@ cut -f1 uniprot2kegg_gene.tsv >uniprot_accessions.txt
 
 # collect all kegg gene ids into one file
 echo "kegg_gene_id" > kegg_genes_all.tsv
-grep -v 'kegg_gene_id' kegg_genes_*.txt >> kegg_genes_all.tsv
+grep -h -v 'kegg_gene_id' kegg_genes_*.txt >> kegg_genes_all.tsv
 
-echo import -d \""$STAMP\"" index jp.kegg.gene kegg_genes_all.txt
+echo import -d \""$STAMP\"" index jp.kegg.gene kegg_genes_all.tsv
 
-echo import -d \""$STAMP\"" index org.uniprot.acc uniprot_accessions.txt
+echo import -d \""$STAMP\"" -s "\"KEGG Linked\"" index org.uniprot.acc uniprot_accessions.txt
 
 echo import -d \""$STAMP\"" map gov.nih.nlm.ncbi.gene jp.kegg.gene ncbi_gene2kegg_gene.tsv
 echo import -d \""$STAMP\"" map org.uniprot.acc jp.kegg.gene uniprot2kegg_gene.tsv

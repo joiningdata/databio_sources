@@ -19,7 +19,7 @@ cut -f3 hgnc.tsv >hgnc_names.txt
 echo import -d "\"$STAMP\"" index org.genenames.gene hgnc_ids.txt
 echo import -d "\"$STAMP\"" index org.genenames.symbol hgnc_symbols.txt
 echo import -d "\"$STAMP\"" index org.genenames.name hgnc_names.txt
-echo import -d "\"$STAMP\"" index uk.ac.qmul.iubmb.enzyme ec_numbers.txt
+echo import -d "\"$STAMP\"" -s "\"HGNC Linked\"" index uk.ac.qmul.iubmb.enzyme ec_numbers.txt
 
 cut -f1,2 hgnc.tsv >hgnc_id2hgnc_symbol.tsv
 cut -f1,3 hgnc.tsv >hgnc_id2hgnc_name.tsv
